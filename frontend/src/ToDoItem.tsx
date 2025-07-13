@@ -1,14 +1,21 @@
+
 import React, { useState } from 'react';
 
 const API_BASE = 'http://localhost:3000/api/todo';
 
-function ToDoItem (props) {
-    const { toDo, id, getToDo } = props;
-    const [completed, setCompleted] = useState(false);
+interface ToDoItemProps {
+    toDo: string;
+    id: string;
+    getToDo: () => void;
+}
 
-    const deleteTodo = async (id) => {
+function ToDoItem (props: ToDoItemProps) {
+    const { toDo, id, getToDo } = props;
+    const [completed, setCompleted] = useState<boolean>(false);
+
+    const deleteTodo = async (id: string) => {
         try {
-            const response = await fetch(API_BASE + "/delete", {
+            const response = await fetch(API_BASE + `/delete/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -33,7 +40,7 @@ function ToDoItem (props) {
         }
     }
 
-    const updateTodo = async (id, completed) => {
+    const updateTodo = async (id: string, completed: boolean) => {
     try {
         const response = await fetch(API_BASE + "/update", {
             method: "PUT",

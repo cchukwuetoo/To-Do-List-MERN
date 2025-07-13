@@ -4,16 +4,20 @@ import ToDoItem from './ToDoItem';
 
 const API_BASE = 'http://localhost:3000/api/todo';
 
-function App () {
-  const [items, setItems] = useState([]);
+interface ToDoItemData {
+  _id: string;
+  toDo: string;
+}
 
-  const [input, setInput] = useState('');
+function App () {
+  const [items, setItems] = useState<ToDoItemData[]>([]);
+  const [input, setInput] = useState<string>('');
 
   useEffect(() => {
     getToDo();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   }
 
@@ -56,7 +60,7 @@ function App () {
   }
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addItem();
   }

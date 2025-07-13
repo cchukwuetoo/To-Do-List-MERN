@@ -1,6 +1,6 @@
 # Todo List Application
 
-A full-stack todo list application built with React frontend and Node.js backend, allowing users to create, read, update, and delete todo items.
+A full-stack todo list application built with React Typescript frontend and TypeScript backend, allowing users to create, read, update, and delete todo items.
 
 ## Features
 
@@ -9,18 +9,26 @@ A full-stack todo list application built with React frontend and Node.js backend
 - ✅ Delete todo items
 - ✅ Real-time updates with backend synchronization
 - ✅ Responsive design with visual feedback
+- ✅ Responsive design with visual feedback
+- ✅ Full TypeScript implementation for type safety
+- ✅ Robust input validation with Zod
+- ✅ Modular backend architecture with separate database connection
 
 ## Technology Stack
 
 **Frontend:**
+- React 18 with TypeScript
 - React 18 with Hooks (useState, useEffect)
-- Modern JavaScript (ES6+)
+- Modern TypeScript (ES6+)
 - CSS for styling
 
 **Backend:**
-- Node.js
+- TypeScript
 - Express.js
 - MongoDB (assumed based on `_id` field)
+- Zod for runtime validation
+- CORS for cross-origin requests
+- Environment variables with dotenv
 
 ## Project Structure
 
@@ -28,18 +36,20 @@ A full-stack todo list application built with React frontend and Node.js backend
 todo-app/
 |────────Backend
 |────controller
-|     |──ToDoController.js
+|     |──ToDoController.ts
+|────────Connection
+      |────db.ts     #Databaseconnetion
 |────models
-|     |──ToDoModel.js
+|     |──ToDoModel.ts
 |────routes
-|     |──ToDoRoute.js
+|     |──ToDoRoute.ts
 |────package.json
-|────server.js
+|────server.js      #Main application component
 |────────frontend
 ├── src/
-│   ├── App.js          # Main application component
-│   ├── ToDoItem.js     # Individual todo item component
-│   └── index.js
+│   ├── App.tsx          # Main application component
+│   ├── ToDoItem.tsx     # Individual todo item 
+│   └── index.tsx
 ├── package.json
 └── README.md
 ```
@@ -49,11 +59,14 @@ todo-app/
 The application communicates with a backend API running on `http://localhost:3000/api/todo`:
 
 - `GET /api/todo/get` - Fetch all todos
-- `POST /api/todo/add-to-do` - Add a new todo
+- `POST /api/todo/add-to-do` - Add a new todo(with Zod validation)
 - `PUT /api/todo/update` - Update todo completion status
 - `DELETE /api/todo/delete/:id` - Delete a todo
 
 ## Installation & Setup
+**Prerequisites**
+Node.js (v16 or higher)
+MongoDB (local or cloud instance)
 
 1. **Clone the repository**
    ```bash
@@ -88,13 +101,13 @@ The application communicates with a backend API running on `http://localhost:300
 
 ## Component Architecture
 
-### App.js
+### App.tsx
 - Main application component
 - Manages global state for todos and input
 - Handles API calls for fetching and adding todos
 - Renders the todo list and form
 
-### ToDoItem.js
+### ToDoItem.tsx
 - Individual todo item component
 - Manages completion state
 - Handles update and delete operations
@@ -103,12 +116,14 @@ The application communicates with a backend API running on `http://localhost:300
 ## Key Features Implementation
 
 **State Management:**
-- Uses React Hooks (`useState`, `useEffect`) for state management
+- Uses React Hooks (`useState`, `useEffect`) with TypeScript generics for state management
 - Local state for UI interactions, API calls for data persistence
 
 **API Integration:**
 - Async/await pattern for API calls
 - Error handling with try-catch blocks
+- Backend: Zod validation for request data, MongoDB connection error handling
+- Frontend: Try-catch blocks for API calls, user-friendly error messages
 - Automatic list refresh after modifications
 
 **User Experience:**
