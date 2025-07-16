@@ -23,7 +23,8 @@ export const toDoValidation = {
     }),
     update: z.object({
         id: z.string().min(1, 'ID is required'),
-        toDo: z.string().min(1, 'To-do item is required').max(500, 'To-do item must be less than 500 characters')
+        toDo: z.string().min(1, 'To-do item is required').max(500, 'To-do item must be less than 500 characters').optional(),
+        completed: z.boolean().optional()
     }),
     delete: z.object({
         id: z.string().min(1, 'ID is required')
