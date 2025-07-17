@@ -75,6 +75,24 @@ export const toggleToDo = async (req: Request<{id: string}>, res: Response): Pro
     }
 }
 
+export const CompletedToDos = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const completedToDos: IToDo[] = await ToDo.find({ completed: true });
+        res.status(200).json(completedToDos);
+    } catch (error) {
+        sendError(res, 500, 'Error fetching completed to-dos', error);
+    }
+};
+
+export const IncompleteToDos = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const incompleteToDos: IToDo[] = await ToDo.find({ completed: false });
+        res.status(200).json(incompleteToDos);
+    } catch (error) {
+        sendError(res, 500, 'Error fetching incomplete to-dos', error);
+    }
+};
+
 export const deleteToDo = async (req: Request<{id: string}>, res: Response): Promise<void> => {
     const validation = validateRequest(toDoValidation.delete, req.params);
     if (!validation.success) {
