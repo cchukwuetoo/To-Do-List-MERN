@@ -1,6 +1,6 @@
 import {Request, Response } from 'express'
 import ToDo, {IToDo} from '../models/ToDoModel'
-import { sendError, sendSuccess, toDoValidation, validateRequest } from '../utils/errorUtils';
+import { sendError, sendSuccess, toDoValidation, validateRequest } from '../utils/utils';
 
 export const getToDo = async (req: Request, res: Response): Promise<void> => {
     try {
