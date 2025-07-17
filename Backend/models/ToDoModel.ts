@@ -14,11 +14,14 @@ const toDoSchema: Schema<IToDo> = new mongoose.Schema({
     toDo: {
         type: String,
         required: true,
-        completed: {type: Boolean, default: false},
         trim: true,
         minlength: [1, 'To-do item is required'],
         maxlength: [500, 'To-do item must be less than 500 characters']
        
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true
