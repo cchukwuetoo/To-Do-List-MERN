@@ -5,7 +5,10 @@ import { sendError, sendSuccess, toDoValidation, validateRequest } from '../util
 export const getToDo = async (req: Request, res: Response): Promise<void> => {
     try {
         const toDos: IToDo[] = await ToDo.find();
-        res.status(200).json(toDos);
+        res.status(200).json({
+            success: true,
+            data: toDos
+        });
     } catch (error) {
         sendError(res, 500, 'Error fetching To-Do list', error);
     }
