@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getToDo, addToDo, updateToDo, toggleToDo, CompletedToDos, IncompleteToDos } from '../controller/ToDoController';
+import { getToDo, addToDo, updateToDo, toggleToDo, CompletedToDos, IncompleteToDos, deleteToDo } from '../controller/ToDoController';
 import ToDo from '../models/ToDoModel';
 import { validateRequest, sendError, sendSuccess } from '../utils/utils';
 
@@ -224,6 +224,52 @@ describe('ToDo Controller', () => {
             await IncompleteToDos(mockReq as Request, mockRes as Response);
             
             expect(mockSendError).toHaveBeenCalledWith(mockRes, 500, 'Error fetching incomplete to-dos', error);
+        });
+    });
+
+     describe('deleteToDo', () => {
+        it('should delete a todo successfully', async () => {
+            const mockDeletedTodo = { _id: '1', toDo: 'Deleted todo', completed: false };
+            
+            mockValidateRequest.mockReturnValue({ success: true, data: { id: '1' } });
+            mockToDo.findByIdAndDelete.mockResolvedValue(mockDeletedTodo as any);
+            
+            const mockDeleteReq = { params: {id: '1' } } as Request<{ id: string }>;
+            await deleteToDo(mockDeleteReq, mockRes as Response);
+            
+            expect(mockToDo.findByIdAndDelete).toHaveBeenCalledWith('1');
+            expect(mockSendSuccess).toHaveBeenCalledWith(mockRes, 200, 'To-do deleted successfully', mockDeletedTodo);
+        });
+
+        it('should handle validation errors in delete', async () => {
+            mockValidateRequest.mockReturnValue({ success: false, message: 'Invalid request data' });
+            const mockDeleteReq = { params: {id: '1' } } as Request<{ id: string }>;
+            
+            await deleteToDo(mockDeleteReq, mockRes as Response);
+            
+            expect(mockSendError).toHaveBeenCalledWith(mockRes, 400, 'Invalid request data');
+        });
+
+        it('should handle todo not found in delete', async () => {
+            mockValidateRequest.mockReturnValue({ success: true, data: { id: '1' } });
+            mockToDo.findByIdAndDelete.mockResolvedValue(null);
+            
+            const mockDeleteReq = { params: {id: '1' } } as Request<{ id: string }>;
+            await deleteToDo(mockDeleteReq, mockRes as Response);
+            
+            expect(mockSendError).toHaveBeenCalledWith(mockRes, 404, 'To-do not found');
+        });
+
+        it('should handle database errors in delete', async () => {
+            const error = new Error('Database error');
+            
+            mockValidateRequest.mockReturnValue({ success: true, data: { id: '1' } });
+            mockToDo.findByIdAndDelete.mockRejectedValue(error);
+            
+            const mockDeleteReq = { params: {id: '1' } } as Request<{ id: string }>;
+            await deleteToDo(mockDeleteReq, mockRes as Response);
+            
+            expect(mockSendError).toHaveBeenCalledWith(mockRes, 500, 'Error deleting to-do', error);
         });
     });
 })
